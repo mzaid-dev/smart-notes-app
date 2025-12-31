@@ -1,4 +1,4 @@
-import 'dart:ui';
+// import 'dart:ui';
 
 import 'package:flutter/material.dart';
 import 'package:smart_notes_app/core/constants/AppAssets.dart';
@@ -7,13 +7,25 @@ import 'package:smart_notes_app/core/theme/theme_helpers.dart';
 import 'bg_image_selector.dart';
 
 class BgWrapper extends StatefulWidget {
-  const BgWrapper({super.key});
+  final List<String> bgImagesList;
+  final Widget child;
+  final Widget Function(int index, ValueChanged<int> onChanged)  bgimageselector;
+  const BgWrapper({super.key,required this.child, required this.bgimageselector,required this.bgImagesList});
 
   @override
   State<BgWrapper> createState() => _BgWrapperState();
 }
 
 class _BgWrapperState extends State<BgWrapper> {
+  @override
+  void initState() {
+    super.initState();
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      for (var imagePath in widget.bgImagesList) {
+        precacheImage(AssetImage(imagePath), context);
+      }
+    });
+  }
   int _currentIndex = 0;
 
   @override
@@ -37,7 +49,7 @@ class _BgWrapperState extends State<BgWrapper> {
                 );
               },
               child: Image.asset(
-                AppAssets.bgImages[_currentIndex],
+                widget.bgImagesList[_currentIndex],
                 key: ValueKey<int>(_currentIndex),
                 fit: BoxFit.cover,
                 width: double.infinity,
@@ -46,6 +58,13 @@ class _BgWrapperState extends State<BgWrapper> {
             ),
           ),
 
+          Padding(
+            padding: EdgeInsets.all(60),
+            child: Align(
+              alignment: Alignment.topCenter,
+              child: widget.child,
+            ),
+          ),
           // Center(
           //   child: ClipRRect(
           //     borderRadius: BorderRadius.circular(30),
@@ -82,18 +101,30 @@ class _BgWrapperState extends State<BgWrapper> {
           //   ),
           // ),
 
+
+          // Padding(
+          //   padding: const EdgeInsets.only(top: 8.0, bottom: 40),
+          //   child: Align(
+          //     alignment: Alignment.bottomCenter,
+          //     child: BgImageSelector(
+          //       currentIndex: _currentIndex,
+          //       onIndexChanged: (newVal) {
+          //         setState(() {
+          //           _currentIndex = newVal;
+          //         });
+          //       },
+          //     ),
+          //   ),
+          // ),
           Padding(
-            padding: const EdgeInsets.only(top: 8.0, bottom: 40),
+            padding: const EdgeInsets.only(bottom: 40),
             child: Align(
               alignment: Alignment.bottomCenter,
-              child: CustomMacOSDock(
-                currentIndex: _currentIndex,
-                onIndexChanged: (newVal) {
-                  setState(() {
-                    _currentIndex = newVal;
-                  });
-                },
-              ),
+              child: widget.bgimageselector(_currentIndex,(newIndex){
+                setState(() {
+                  _currentIndex = newIndex;
+                });
+              })
             ),
           ),
         ],

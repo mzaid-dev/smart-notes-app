@@ -3,6 +3,8 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:smart_notes_app/core/theme/logic/theme_bloc.dart';
 import 'package:smart_notes_app/core/theme/logic/theme_event.dart';
 import 'package:smart_notes_app/core/theme/logic/theme_state.dart';
+import 'package:smart_notes_app/features/auth/ui/login/desktop/login_web.dart';
+import 'package:smart_notes_app/features/auth/ui/login/login_screen.dart';
 import 'package:smart_notes_app/features/auth/ui/widgets/bg_wrapper.dart';
 import 'package:smart_notes_app/test1.dart';
 import 'package:smart_notes_app/test3.dart';
@@ -29,26 +31,26 @@ class MyApp extends StatelessWidget {
           theme: AppThemes.light,
           darkTheme: AppThemes.dark,
           themeMode: state.themeMode,
-          home: BgWrapper(),
+          home: LoginScreen(),
         );
       },
     );
   }
 }
-
-
-class HomeScreen extends StatelessWidget {
-  const HomeScreen({super.key});
-
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      backgroundColor: context.appColors.scaffoldBg,
-      body: Center(
-        child: ElevatedButton(onPressed: (){
-          context.read<ThemeBloc>().add(ToggleThemeEvent());
-        }, child: const Text("Toggle Theme")),
-      ),
-    );
-  }
-}
+//
+//
+// class HomeScreen extends StatelessWidget {
+//   const HomeScreen({super.key});
+//
+//   @override
+//   Widget build(BuildContext context) {
+//     return Scaffold(
+//       backgroundColor: context.appColors.scaffoldBg,
+//       body: Center(
+//         child: ElevatedButton(onPressed: (){
+//           context.read<ThemeBloc>().add(ToggleThemeEvent());
+//         }, child: const Text("Toggle Theme")),
+//       ),
+//     );
+//   }
+// }
